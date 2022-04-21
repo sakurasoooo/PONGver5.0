@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ball
+  - Player_blue
+  - Player_red
+  - Ball_blue
+  - Ball_red
   layers:
   - Default
   - TransparentFX

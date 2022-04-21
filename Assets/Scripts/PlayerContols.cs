@@ -10,10 +10,12 @@ public class PlayerContols : MonoBehaviour
     public float speed = 10.0f;
     public float boundY = 2.25f;
     private Rigidbody2D rb2d;
+    private Vector2 bornPos;
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        bornPos = transform.position;
     }
 
     // Update is called once per frame
@@ -41,5 +43,9 @@ public class PlayerContols : MonoBehaviour
         }
 
         transform.position = pos;
+    }
+
+   private void OnDisable() {
+        rb2d.position = bornPos;
     }
 }
