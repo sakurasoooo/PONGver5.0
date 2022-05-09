@@ -24,7 +24,8 @@ public class SuperAbility : MonoBehaviour
     private float cost = 5.0f;
     // Update is called once per frame
 
-    private void Awake() {
+    private void Awake()
+    {
         locked = true;
         p1Energy = maxEnergy;
         p2Energy = maxEnergy;
@@ -47,12 +48,11 @@ public class SuperAbility : MonoBehaviour
         {
             if (Input.GetKey(p1key) && p1Energy > 0)
             {
-                Debug.Log("WOWWWW");
                 p1Energy -= cost * Time.deltaTime;
                 Rigidbody2D rb2d = ball1.GetComponent<Rigidbody2D>();
                 Vector2 direction = (player1.transform.position - ball1.transform.position);
                 direction = direction.normalized;
-                rb2d.AddForce(direction * cost* acceleration * Time.deltaTime);
+                rb2d.AddForce(direction * cost * acceleration * Time.deltaTime);
             }
 
             if (Input.GetKey(p2key) && p2Energy > 0)
@@ -61,16 +61,18 @@ public class SuperAbility : MonoBehaviour
                 Rigidbody2D rb2d = ball2.GetComponent<Rigidbody2D>();
                 Vector2 direction = (player2.transform.position - ball2.transform.position);
                 direction = direction.normalized;
-                rb2d.AddForce(direction * cost* acceleration * Time.deltaTime);
+                rb2d.AddForce(direction * cost * acceleration * Time.deltaTime);
             }
         }
     }
 
-    void LockControl() {
+    void LockControl()
+    {
         locked = true;
     }
 
-    void UnLockControl() {
+    void UnLockControl()
+    {
         locked = false;
     }
 }
