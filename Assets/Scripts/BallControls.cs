@@ -7,6 +7,15 @@ public class BallControls : MonoBehaviour
     private Vector2 bornPos = Vector2.zero;
     private Rigidbody2D rb2d;
     private GameObject HUD;
+
+    private AudioSource audioSource;
+    public AudioClip hit;
+    public AudioClip explosion;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -16,12 +25,6 @@ public class BallControls : MonoBehaviour
         RestartGame();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-
-    }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -33,10 +36,21 @@ public class BallControls : MonoBehaviour
                 vel.x = rb2d.velocity.x;
                 vel.y = (rb2d.velocity.y / 2) + (other.collider.attachedRigidbody.velocity.y / 3);
                 rb2d.velocity = vel;
-            } else if (other.collider.CompareTag("Player_red")) {
-                 HUD.GetComponent<GameControls>().RespawnPlayer(other.gameObject.tag);// hide player
+                audioSource.PlayOneShot(hit);
+            }
+            else if (other.collider.CompareTag("Player_red"))
+            {
+
+                GameObject.Find("Ability Manager").SendMessage("LockControl"); // lock ability
+
+                HUD.GetComponent<GameControls>().RespawnPlayer(other.gameObject.tag);// hide player
                 GameControls.Score(other.gameObject.tag);
                 HUD.GetComponent<GameControls>().Restart();
+                audioSource.PlayOneShot(explosion);
+            }
+            else // hit wall
+            {
+                audioSource.PlayOneShot(hit);
             }
         }
         else if (gameObject.tag == "Ball_red")
@@ -47,17 +61,29 @@ public class BallControls : MonoBehaviour
                 vel.x = rb2d.velocity.x;
                 vel.y = (rb2d.velocity.y / 2) + (other.collider.attachedRigidbody.velocity.y / 3);
                 rb2d.velocity = vel;
-            }else if (other.collider.CompareTag("Player_blue")) {
+                audioSource.PlayOneShot(hit);
+            }
+            else if (other.collider.CompareTag("Player_blue"))
+            {
+                GameObject.Find("Ability Manager").SendMessage("LockControl"); // lock ability
+
                 HUD.GetComponent<GameControls>().RespawnPlayer(other.gameObject.tag);// hide player
                 GameControls.Score(other.gameObject.tag);
                 HUD.GetComponent<GameControls>().Restart();
+                audioSource.PlayOneShot(explosion);
+            }
+            else // hit wall
+            {
+                audioSource.PlayOneShot(hit);
             }
         }
-        
+
+
     }
 
     void Goball()
     {
+        GameObject.Find("Ability Manager").SendMessage("UnLockControl"); // unlock ability
         float rand = Random.Range(0, 2);
         if (rand < 1)
         {
@@ -89,7 +115,7 @@ public class BallControls : MonoBehaviour
         transform.position = bornPos;
     }
 
-    void  RestartGame()
+    void RestartGame()
     {
         ResetBall();
         Invoke("Goball", 2);
